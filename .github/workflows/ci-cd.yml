@@ -71,7 +71,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/churn-api:latest .
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/churn-api:latest -f docker/inference/Dockerfile .
 
     - name: Log in to DockerHub
       uses: docker/login-action@v2
