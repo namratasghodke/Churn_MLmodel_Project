@@ -54,8 +54,12 @@ def train_model(data=None, target_column="Churn", run_mlflow=True):
     }
 
     if run_mlflow:
-        # === MLflow Setup ===
-        mlflow.set_tracking_uri("http://localhost:5000")
+        # === MLflow URI Setup ===
+        if os.getenv("CI") == "true":
+            mlflow.set_tracking_uri("file:///tmp/mlruns")
+        else:
+            mlflow.set_tracking_uri("http://localhost:5000")
+
         mlflow.set_experiment("churn-prediction-namrata")
 
         with mlflow.start_run():
@@ -81,7 +85,6 @@ def train_model(data=None, target_column="Churn", run_mlflow=True):
         print("✅ Model trained (no MLflow run).")
 
     return model, metrics["val_accuracy"]
-
 
 # === Optional direct run ===
 if __name__ == "__main__":
