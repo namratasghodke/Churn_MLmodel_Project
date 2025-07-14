@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      MLFLOW_TRACKING_URI: http://localhost:5000
+      MLFLOW_TRACKING_URI: http://127.0.0.1:5000
       MLFLOW_EXPERIMENT_NAME: churn-prediction-namrata
 
     steps:
@@ -37,12 +37,11 @@ jobs:
       uses: iterative/setup-dvc@v1
 
     - name: Pull data from DVC remote
-      run: |
-        dvc pull -f
+      run: dvc pull -f
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Start MLflow Tracking Server
+    - name: Start MLflow Tracking Server in background
       run: |
         nohup mlflow server \
           --backend-store-uri sqlite:///mlflow.db \
@@ -55,15 +54,15 @@ jobs:
 
     - name: Run Training
       run: |
-        python src/training/train.py 
+        python src/training/train.py
 
     - name: Run Monitoring
       run: |
-        python -m monitoring.monitor
+        PYTHONPATH=src python -m monitoring.monitor
 
-    - name: Run FastAPI app in background
+    - name: Run FastAPI app (background)
       run: |
-        nohup python src/inference/app.py &
+        nohup PYTHONPATH=src python src/inference/app.py &
         sleep 5
 
     - name: Run Tests (Optional)
