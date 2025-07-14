@@ -1,0 +1,76 @@
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*.so
+*.pyd
+*.pyo
+
+# Virtual environment
+venv/
+.env/
+.venv/
+
+# VSCode or PyCharm settings
+.vscode/
+.idea/
+
+# Environment variable files
+*.env
+.env.*
+
+# DVC cache and logs
+.dvc/tmp/
+.dvc/cache/
+*.dvc.lock
+
+# MLflow
+mlruns/
+mlflow.db
+
+# Data files
+*.csv
+*.tsv
+*.xlsx
+*.parquet
+data/
+*.h5
+*.pkl
+*.joblib
+
+# Logs
+logs/
+*.log
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Docker
+*.tar
+*.img
+*.container
+Dockerfile
+
+# FastAPI Uvicorn reload artifacts
+*.pid
+*.db
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Testing
+.coverage
+htmlcov/
+__coverage__/
+pytest_cache/
+.cache/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Pip and poetry
+pip-log.txt
+pip-delete-this-directory.txt
+poetry.lock

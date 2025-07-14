@@ -1,0 +1,13 @@
+prefix=C:/Users/karis/OneDrive/Desktop/DAILY READING/EXIT_MLmodel_pipeline/envs/Library
+exec_prefix=C:/Users/karis/OneDrive/Desktop/DAILY READING/EXIT_MLmodel_pipeline/envs/Library
+libdir=C:/Users/karis/OneDrive/Desktop/DAILY READING/EXIT_MLmodel_pipeline/envs/Library/lib
+sharedlibdir=C:/Users/karis/OneDrive/Desktop/DAILY READING/EXIT_MLmodel_pipeline/envs/Library/lib
+includedir=C:/Users/karis/OneDrive/Desktop/DAILY READING/EXIT_MLmodel_pipeline/envs/Library/include
+
+Name: zlib
+Description: zlib compression library
+Version: 1.2.13
+
+Requires:
+Libs: -L${libdir} -L${sharedlibdir} -lz
+Cflags: -I${includedir}

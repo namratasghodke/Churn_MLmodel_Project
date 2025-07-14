@@ -1,0 +1,10 @@
+scikit-learn
+pandas
+fastapi
+uvicorn
+mlflow
+alibi-detect
+numpy<2.0.0
+matplotlib
+bottleneck
+numexpr
