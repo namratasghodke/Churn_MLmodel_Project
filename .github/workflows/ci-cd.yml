@@ -85,7 +85,7 @@ jobs:
 
       - name: Install kubectl
         run: |
-          curl -LO "https://dl.k8s.io/release/$(curl -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          curl -LO "https://dl.k8s.io/release/v1.30.0/bin/linux/amd64/kubectl"
           chmod +x kubectl
           sudo mv kubectl /usr/local/bin/
 
@@ -121,7 +121,7 @@ jobs:
       - name: Apply ServiceMonitor
         run: kubectl apply -f monitor/service_monitor.yaml
 
-      # Optional: port-forward Grafana dashboard (only for local runner)
+      # Optional: Port-forward Grafana dashboard (only for local use)
       # - name: Port Forward Grafana
       #   run: |
       #     nohup kubectl port-forward -n monitoring svc/prometheus-grafana 3000:80 > grafana.log 2>&1 &
