@@ -1,0 +1,21 @@
+grafana:
+  adminPassword: admin123
+  service:
+    type: LoadBalancer
+  serviceMonitor:
+    selfMonitor: true
+  defaultDashboardsEnabled: true
+  sidecar:
+    dashboards:
+      enabled: true
+    datasources:
+      enabled: true
+
+prometheus:
+  prometheusSpec:
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelector: {}
+    serviceMonitorSelector: {}
+    scrapeInterval: 15s
+    evaluationInterval: 15s

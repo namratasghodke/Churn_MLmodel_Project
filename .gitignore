@@ -41,18 +41,7 @@ data/
 logs/
 *.log
 
-# Jupyter Notebook checkpoints
-.ipynb_checkpoints/
 
-
-
-# FastAPI Uvicorn reload artifacts
-*.pid
-*.db
-
-# OS files
-.DS_Store
-Thumbs.db
 
 # Testing
 .coverage

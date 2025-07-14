@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: churn-app
+  labels:
+    app: churn
+    prometheus: enabled
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: churn
+  template:
+    metadata:
+      labels:
+        app: churn
+        prometheus: enabled  # 🚨 Required for ServiceMonitor selector
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /metrics
+        prometheus.io/port: "8001"
+    spec:
+      containers:
+        - name: churn-app
+          image: placework459/churn-app:latest  # ✅ Update this
+          ports:
+            - containerPort: 8000  # FastAPI
+            - containerPort: 8001  # Prometheus metrics
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1Gi"
+              cpu: "1000m"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 30
