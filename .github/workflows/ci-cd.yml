@@ -1,9 +1,69 @@
-name: CI/CD
+name: MLOps CI/CD Pipeline
 
-on: [push]
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-  build:
+  build-train-test:
     runs-on: ubuntu-latest
+
+    env:
+      MLFLOW_TRACKING_URI: http://localhost:5000
+      MLFLOW_EXPERIMENT_NAME: churn-prediction
+
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+
+    - name: Set up Git config
+      run: |
+        git config --global user.email "namratasghodke@gmail.com"
+        git config --global user.name "namratasghodke"
+
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Set up DVC
+      uses: iterative/setup-dvc@v1
+
+    - name: Pull data from DVC remote
+      run: |
+        dvc pull -f
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Run Training
+      run: |
+        python src/training/train_model.py
+
+    - name: Run Monitoring
+      run: |
+        python -m monitoring.monitor
+
+    - name: Run Tests (Optional)
+      run: |
+        pytest tests/
+
+    - name: Build Docker image
+      run: |
+        docker build -t your-dockerhub-username/churn-api:latest .
+
+    - name: Log in to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Push Docker image
+      run: |
+        docker push your-dockerhub-username/churn-api:latest
