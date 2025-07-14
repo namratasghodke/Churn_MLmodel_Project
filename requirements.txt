@@ -8,3 +8,4 @@ numpy<2.0.0
 matplotlib
 bottleneck
 numexpr
+prometheus_client
