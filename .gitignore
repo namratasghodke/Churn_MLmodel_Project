@@ -44,11 +44,7 @@ logs/
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
 
-# Docker
-*.tar
-*.img
-*.container
-Dockerfile
+
 
 # FastAPI Uvicorn reload artifacts
 *.pid
