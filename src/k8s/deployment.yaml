@@ -22,10 +22,14 @@ spec:
     spec:
       containers:
         - name: churn-app
-          image: placework459/churn-app:latest  # ✅ Update this
+          image: placework459/churn-app:latest  # ✅ Use your working image
+          workingDir: /app                      # ✅ Ensures relative paths work
           ports:
             - containerPort: 8000  # FastAPI
             - containerPort: 8001  # Prometheus metrics
+          env:
+            - name: SLACK_WEBHOOK_URL
+              value: "https://hooks.slack.com/services/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"
           resources:
             requests:
               memory: "512Mi"
