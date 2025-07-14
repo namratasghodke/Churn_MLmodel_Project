@@ -120,7 +120,7 @@ jobs:
           kubectl get svc -n monitoring
 
       - name: Apply ServiceMonitor
-        run: kubectl apply -f monitor/service_monitor.yaml
+        run: kubectl apply -f src/prometheus/servicemonitor.yaml
 
       # Optional: Port-forward Grafana dashboard (only for local use)
       # - name: Port Forward Grafana
