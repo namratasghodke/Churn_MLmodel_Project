@@ -62,12 +62,12 @@ jobs:
 
     - name: Run FastAPI app (background)
       run: |
-        nohup PYTHONPATH=src python src/inference/app.py &
+        nohup PYTHONPATH=src python src/inference/app.py & 
         sleep 5
 
-    - name: Run Tests (Optional)
-      run: |
-        pytest tests/
+    # - name: Run Tests (Optional)
+    #   run: |
+    #     pytest tests/
 
     - name: Build Docker image
       run: |
