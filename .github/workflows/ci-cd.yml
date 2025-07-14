@@ -16,67 +16,69 @@ jobs:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.9
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
 
-    - name: Set up Git config
-      run: |
-        git config --global user.email "namratasghodke@gmail.com"
-        git config --global user.name "namratasghodke"
+      - name: Set up Git config
+        run: |
+          git config --global user.email "namratasghodke@gmail.com"
+          git config --global user.name "namratasghodke"
 
-    - name: Install dependencies
-      run: |
-        pip install --upgrade pip
-        pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: Set up DVC
-      uses: iterative/setup-dvc@v1
+      - name: Set up DVC
+        uses: iterative/setup-dvc@v1
 
-    - name: Pull data from DVC remote
-      run: dvc pull -f
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Pull data from DVC remote
+        run: dvc pull -f
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Start MLflow Tracking Server in background
-      run: |
-        nohup mlflow server \
-          --backend-store-uri sqlite:///mlflow.db \
-          --default-artifact-root ./mlruns \
-          --host 127.0.0.1 \
-          --port 5000 > mlflow.log 2>&1 &
+      - name: Start MLflow Tracking Server in background
+        run: |
+          nohup mlflow server \
+            --backend-store-uri sqlite:///mlflow.db \
+            --default-artifact-root ./mlruns \
+            --host 127.0.0.1 \
+            --port 5000 > mlflow.log 2>&1 &
 
-    - name: Wait for MLflow server to start
-      run: sleep 10
+      - name: Wait for MLflow server to start
+        run: sleep 10
 
-    - name: Run Training
-      run: |
-        python src/training/train.py
+      - name: Run Training
+        run: |
+          python src/training/train.py
 
-    - name: Run Monitoring
-      run: |
-        PYTHONPATH=src python -m monitoring.monitor
+      - name: Run Monitoring
+        run: |
+          PYTHONPATH=src python -m monitoring.monitor
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-    - name: Debug Docker context
-      run: ls -R
+      # Debug steps to check directory structure and Dockerfile presence
+      - name: List root directory recursively
+        run: ls -R
 
-    - name: Log in to DockerHub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: List docker/inference directory
+        run: ls -la docker/inference
 
-    - name: Build Docker image
-      run: |
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/churn-new-namrata -f docker/inference/Dockerfile .
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Push Docker image
-      run: |
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/churn-new-namrata
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/churn-new-namrata -f docker/inference/Dockerfile .
+
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/churn-new-namrata
