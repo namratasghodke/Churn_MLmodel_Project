@@ -11,7 +11,10 @@ data_drift_metric = Gauge('data_drift_distance', 'Wasserstein distance between t
 
 # === Slack Alert Function ===
 def send_slack_alert(message: str):
-    webhook_url = "https://hooks.slack.com/services/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"
+    webhook_url = os.getenv("SLACK_WEBHOOK_URL")
+    if not webhook_url:
+        print("⚠️ SLACK_WEBHOOK_URL not set. Skipping alert.")
+        return
     try:
         response = requests.post(webhook_url, json={"text": message})
         response.raise_for_status()
