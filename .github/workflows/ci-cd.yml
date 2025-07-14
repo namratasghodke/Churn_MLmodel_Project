@@ -110,8 +110,9 @@ jobs:
 
       - name: Install Prometheus and Grafana
         run: |
-          chmod +x src/prometheus/install-monitoring.sh
-          ./src/prometheus/install-monitoring.sh
+          cd src/prometheus
+          chmod +x install-monitoring.sh
+          ./install-monitoring.sh
 
       - name: Verify monitoring pods and services
         run: |
