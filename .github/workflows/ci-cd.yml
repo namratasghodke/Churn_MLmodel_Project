@@ -48,7 +48,7 @@ jobs:
           --backend-store-uri sqlite:///mlflow.db \
           --default-artifact-root ./mlruns \
           --host 127.0.0.1 \
-          --port 5000 &
+          --port 5000 > mlflow.log 2>&1 &
 
     - name: Wait for MLflow server to start
       run: sleep 10
@@ -61,12 +61,8 @@ jobs:
       run: |
         PYTHONPATH=src python -m monitoring.monitor
 
-    # Optional: run API test if needed
-    # - name: Run FastAPI app and test
-    #   run: |
-    #     nohup PYTHONPATH=src python src/inference/app.py &
-    #     sleep 5
-    #     curl http://localhost:8000/
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
 
     - name: Log in to DockerHub
       uses: docker/login-action@v2
